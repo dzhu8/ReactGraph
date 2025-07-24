@@ -12,6 +12,9 @@
   :root {
     --background: oklch(100% 0 0);
     --foreground: oklch(9.8% 0.024 240);
+
+    --card: oklch(100% 0 0);                  
+    --card-foreground: oklch(9.8% 0.024 240);
     
     --secondary: oklch(0% 0 0);
     --secondary-foreground: oklch(100% 0 0);
@@ -67,6 +70,9 @@
   .dark {
     --background: oklch(12% 0.036 210);
     --foreground: oklch(90% 0.075 210);
+
+    --card: oklch(15% 0.036 210);           
+    --card-foreground: oklch(90% 0.075 210);
 
     --muted: oklch(28% 0.036 210);
     --muted-foreground: oklch(60% 0.025 210);
@@ -152,6 +158,20 @@
 .react-flow__edge.selectable>path {
   /* If necessary, add !important to the rule */
   pointer-events: none !important;
+}
+
+.custom-dot-background {
+  background-color: var(--background);
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+/* Then update your ReactFlow container */
+.react-flow-container {
+  background-color: var(--background);
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
 /* This is a hack to fix the issue with the pointer events being set to none when the vaul drawer is open */

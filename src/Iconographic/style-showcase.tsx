@@ -59,11 +59,7 @@ const mockNodes = [
 ];
 
 // Mock node component (nonfunctional, for display)
-const MockStepNode = ({ data, selected = false, onClick }: {
-     data: any;
-     selected?: boolean;
-     onClick: () => void;
-}) => {
+const MockStepNode = ({ data, selected = false, onClick }: { data: any; selected?: boolean; onClick: () => void }) => {
      return (
           <div
                onClick={onClick}
@@ -73,39 +69,30 @@ const MockStepNode = ({ data, selected = false, onClick }: {
                     maxWidth: "260px",
                }}
                className={cn(
-                    'transition-all border-box rounded-xs border border-solid border-border-color relative hover:border-primary/70 group cursor-pointer bg-background shadow-step-container',
+                    "transition-all border-box rounded-xs border border-solid border-border relative hover:border-primary/70 group cursor-pointer bg-card shadow-step-container",
                     {
-                         'border-primary/70': selected,
+                         "border-primary/70": selected,
                     }
                )}
           >
                {/* Selection overlay - matches production exactly */}
                <div
-                    className={cn(
-                         'absolute left-0 top-0 pointer-events-none rounded-xs w-full h-full',
-                         {
-                              'border-t-[2px] border-primary/70 border-solid': selected,
-                         }
-                    )}
+                    className={cn("absolute left-0 top-0 pointer-events-none rounded-xs w-full h-full", {
+                         "border-t-[2px] border-primary/70 border-solid": selected,
+                    })}
                />
-               
+
                <div className="px-3 h-full w-full overflow-hidden">
                     <div className="flex items-center justify-center h-full w-full gap-3">
                          {/* Logo */}
                          <div className="flex items-center justify-center h-full">
-                              <ImageWithFallback 
-                                   src={data.logo} 
-                                   alt={data.name} 
-                                   className="w-12 h-12"
-                              />
+                              <ImageWithFallback src={data.logo} alt={data.name} className="w-12 h-12" />
                          </div>
 
                          {/* Content */}
                          <div className="grow flex flex-col items-start justify-center min-w-0 w-full">
                               <div className="flex items-center justify-between min-w-0 w-full">
-                                   <div className="text-sm truncate grow shrink">
-                                        1. {data.action}
-                                   </div>
+                                   <div className="text-sm truncate grow shrink">1. {data.action}</div>
                               </div>
                               <div className="flex justify-between w-full items-center">
                                    <div className="text-xs truncate text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap w-full">
@@ -146,11 +133,11 @@ export default function StyleShowcase() {
                </div>
 
                {/* Flow Canvas with Background Grid - Add explicit width and height */}
-               <div 
+               <div
                     className="border border-border-color rounded-lg overflow-hidden shadow-step-container"
-                    style={{ 
-                         width: '100%', 
-                         height: 'calc(100vh - 120px)' 
+                    style={{
+                         width: "100%",
+                         height: "calc(100vh - 120px)",
                     }}
                >
                     <ReactFlow
@@ -159,21 +146,13 @@ export default function StyleShowcase() {
                          nodeTypes={nodeTypes}
                          draggable={false}
                          nodesConnectable={false}
-                         nodesDraggable={true} // Allow dragging for showcase
+                         nodesDraggable={false}
                          elementsSelectable={true}
                          fitView
                          minZoom={0.5}
                          maxZoom={1.5}
                          defaultViewport={{ x: 0, y: 0, zoom: 1 }}
                     >
-                         {/* Background Grid */}
-                         <Background
-                              gap={30}
-                              size={4}
-                              variant={BackgroundVariant.Dots}
-                              bgColor="hsl(var(--background))"
-                              color="hsl(var(--border))"
-                         />
                     </ReactFlow>
                </div>
 
