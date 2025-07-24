@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { PieceIcon } from "./components/piece-icon";
+//import { PieceIcon } from "./components/piece-icon";
+import { ReactFlow, Background, BackgroundVariant } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+
+import { useTheme } from "./components/theme-provider";
+import { cn } from "./utils";
+import ImageWithFallback from "./components/ui/image-with-fallback";
 
 import gmailLogo from "@/assets/gmail.png";
 import slackLogo from "@/assets/slack.png";
@@ -9,14 +15,174 @@ import discordLogo from "@/assets/discord.png";
 import trelloLogo from "@/assets/trello.png";
 
 const mockNodes = [
-     { name: "Gmail", logo: gmailLogo },
-     { name: "Slack", logo: slackLogo },
-     { name: "Google Sheets", logo: sheetsLogo },
-     { name: "OpenAI", logo: openaiLogo },
-     { name: "Discord", logo: discordLogo },
-     { name: "Trello", logo: trelloLogo },
+     {
+          id: "gmail-node",
+          name: "Gmail",
+          logo: gmailLogo,
+          action: "Send Email",
+          description: "Send an email through Gmail",
+     },
+     {
+          id: "slack-node",
+          name: "Slack",
+          logo: slackLogo,
+          action: "Post Message",
+          description: "Post a message to a Slack channel",
+     },
+     {
+          id: "sheets-node",
+          name: "Google Sheets",
+          logo: sheetsLogo,
+          action: "Add Row",
+          description: "Add a new row to a Google Sheets document",
+     },
+     {
+          id: "openai-node",
+          name: "OpenAI",
+          logo: openaiLogo,
+          action: "Chat Completion",
+          description: "Generate AI responses using OpenAI's API",
+     },
+     {
+          id: "discord-node",
+          name: "Discord",
+          logo: discordLogo,
+          action: "Send Message",
+          description: "Send a message to a Discord channel",
+     },
+     {
+          id: "trello-node",
+          name: "Trello",
+          logo: trelloLogo,
+          action: "Create Card",
+          description: "Create a new card in a Trello board",
+     },
 ];
 
-const sizes = ["xs", "sm", "md", "lg", "xl", "xxl"] as const;
+// Mock node component (nonfunctional, for display)
+const MockStepNode = ({ data, selected = false, onClick }) => {
+     return (
+          <div
+               onClick={onClick}
+               style={{
+                    height: "70px",
+                    width: "260px",
+                    maxWidth: "260px",
+               }}
+               className={cn(
+                    'transition-all border-box rounded-sm border border-solid border-border relative hover:border-primary/70 group cursor-pointer bg-background',
+                    {
+                         'border-primary/70': selected,
+                    }
+               )}
+          >
+               {/* Selection overlay - matches production exactly */}
+               <div
+                    className={cn(
+                         'absolute left-0 top-0 pointer-events-none rounded-sm w-full h-full',
+                         {
+                              'border-t-[2px] border-primary/70 border-solid': selected,
+                         }
+                    )}
+               />
+               
+               <div className="px-3 h-full w-full overflow-hidden">
+                    <div className="flex items-center justify-center h-full w-full gap-3">
+                         {/* Logo - exact same styling as production */}
+                         <div className="flex items-center justify-center h-full">
+                              <ImageWithFallback 
+                                   src={data.logo} 
+                                   alt={data.name} 
+                                   className="w-12 h-12"
+                              />
+                         </div>
 
+                         {/* Content - exact same structure as production */}
+                         <div className="grow flex flex-col items-start justify-center min-w-0 w-full">
+                              <div className="flex items-center justify-between min-w-0 w-full">
+                                   <div className="text-sm truncate grow shrink">
+                                        1. {data.action}
+                                   </div>
+                              </div>
+                              <div className="flex justify-between w-full items-center">
+                                   <div className="text-xs truncate text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                                        {data.name}
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     );
+};
 
+export default function StyleShowcase() {
+     const { theme } = useTheme();
+     const [selectedNode, setSelectedNode] = useState(null);
+
+     // Create positioned nodes for the canvas
+     const positionedNodes = mockNodes.map((node, index) => ({
+          id: node.id,
+          type: "custom",
+          position: {
+               x: (index % 3) * 300 + 50, // 3 columns
+               y: Math.floor(index / 3) * 120 + 50, // Rows spaced 120px apart
+          },
+          data: node,
+     }));
+
+     const nodeTypes = {
+          custom: ({ data, selected }) => (
+               <MockStepNode data={data} selected={selected} onClick={() => setSelectedNode(data.id)} />
+          ),
+     };
+
+     return (
+          <div className="w-full h-screen bg-background">
+               <div className="p-4">
+                    <h1 className="text-2xl font-bold mb-4">Iconographic Style</h1>
+               </div>
+
+               {/* Flow Canvas with Background Grid - Add explicit width and height */}
+               <div 
+                    className="border border-border rounded-lg overflow-hidden"
+                    style={{ 
+                         width: '100%', 
+                         height: 'calc(100vh - 120px)' 
+                    }}
+               >
+                    <ReactFlow
+                         nodes={positionedNodes}
+                         edges={[]} // No edges for this showcase
+                         nodeTypes={nodeTypes}
+                         draggable={false}
+                         nodesConnectable={false}
+                         nodesDraggable={true} // Allow dragging for showcase
+                         elementsSelectable={true}
+                         fitView
+                         minZoom={0.5}
+                         maxZoom={1.5}
+                         defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+                    >
+                         {/* Background Grid */}
+                         <Background
+                              gap={30}
+                              size={4}
+                              variant={BackgroundVariant.Dots}
+                              bgColor={theme === "dark" ? "#1a1e23" : "#ffffff"}
+                              color={theme === "dark" ? "#372727" : "#F2F2F2"}
+                         />
+                    </ReactFlow>
+               </div>
+
+               {/* Info Panel */}
+               <div className="p-4 border-t border-border">
+                    {selectedNode && (
+                         <div className="mt-2 text-sm">
+                              <strong>Selected:</strong> {mockNodes.find((n) => n.id === selectedNode)?.name}
+                         </div>
+                    )}
+               </div>
+          </div>
+     );
+}
