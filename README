@@ -1,0 +1,2 @@
+Set the style to visualize by adding a .env file and setting ENTRY_FOLDER="Ergonomic" ("Ergonomic" used for example).
+By default, the style will be "Iconographic".
