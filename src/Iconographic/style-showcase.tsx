@@ -1,9 +1,8 @@
 import { useState } from "react";
-//import { PieceIcon } from "./components/piece-icon";
+import { PieceIcon } from "./components/piece-icon";
 import { ReactFlow, Background, BackgroundVariant } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-import { useTheme } from "./components/theme-provider";
 import { cn } from "./utils";
 import ImageWithFallback from "./components/ui/image-with-fallback";
 
@@ -60,7 +59,11 @@ const mockNodes = [
 ];
 
 // Mock node component (nonfunctional, for display)
-const MockStepNode = ({ data, selected = false, onClick }) => {
+const MockStepNode = ({ data, selected = false, onClick }: {
+     data: any;
+     selected?: boolean;
+     onClick: () => void;
+}) => {
      return (
           <div
                onClick={onClick}
@@ -70,7 +73,7 @@ const MockStepNode = ({ data, selected = false, onClick }) => {
                     maxWidth: "260px",
                }}
                className={cn(
-                    'transition-all border-box rounded-sm border border-solid border-border relative hover:border-primary/70 group cursor-pointer bg-background',
+                    'transition-all border-box rounded-xs border border-solid border-border-color relative hover:border-primary/70 group cursor-pointer bg-background shadow-step-container',
                     {
                          'border-primary/70': selected,
                     }
@@ -79,7 +82,7 @@ const MockStepNode = ({ data, selected = false, onClick }) => {
                {/* Selection overlay - matches production exactly */}
                <div
                     className={cn(
-                         'absolute left-0 top-0 pointer-events-none rounded-sm w-full h-full',
+                         'absolute left-0 top-0 pointer-events-none rounded-xs w-full h-full',
                          {
                               'border-t-[2px] border-primary/70 border-solid': selected,
                          }
@@ -88,7 +91,7 @@ const MockStepNode = ({ data, selected = false, onClick }) => {
                
                <div className="px-3 h-full w-full overflow-hidden">
                     <div className="flex items-center justify-center h-full w-full gap-3">
-                         {/* Logo - exact same styling as production */}
+                         {/* Logo */}
                          <div className="flex items-center justify-center h-full">
                               <ImageWithFallback 
                                    src={data.logo} 
@@ -97,7 +100,7 @@ const MockStepNode = ({ data, selected = false, onClick }) => {
                               />
                          </div>
 
-                         {/* Content - exact same structure as production */}
+                         {/* Content */}
                          <div className="grow flex flex-col items-start justify-center min-w-0 w-full">
                               <div className="flex items-center justify-between min-w-0 w-full">
                                    <div className="text-sm truncate grow shrink">
@@ -117,7 +120,6 @@ const MockStepNode = ({ data, selected = false, onClick }) => {
 };
 
 export default function StyleShowcase() {
-     const { theme } = useTheme();
      const [selectedNode, setSelectedNode] = useState(null);
 
      // Create positioned nodes for the canvas
@@ -132,20 +134,20 @@ export default function StyleShowcase() {
      }));
 
      const nodeTypes = {
-          custom: ({ data, selected }) => (
+          custom: ({ data, selected }: { data: any; selected: boolean }) => (
                <MockStepNode data={data} selected={selected} onClick={() => setSelectedNode(data.id)} />
           ),
      };
 
      return (
-          <div className="w-full h-screen bg-background">
+          <div className="w-full h-screen bg-background font-inter">
                <div className="p-4">
                     <h1 className="text-2xl font-bold mb-4">Iconographic Style</h1>
                </div>
 
                {/* Flow Canvas with Background Grid - Add explicit width and height */}
                <div 
-                    className="border border-border rounded-lg overflow-hidden"
+                    className="border border-border-color rounded-lg overflow-hidden shadow-step-container"
                     style={{ 
                          width: '100%', 
                          height: 'calc(100vh - 120px)' 
@@ -169,14 +171,14 @@ export default function StyleShowcase() {
                               gap={30}
                               size={4}
                               variant={BackgroundVariant.Dots}
-                              bgColor={theme === "dark" ? "#1a1e23" : "#ffffff"}
-                              color={theme === "dark" ? "#372727" : "#F2F2F2"}
+                              bgColor="hsl(var(--background))"
+                              color="hsl(var(--border))"
                          />
                     </ReactFlow>
                </div>
 
                {/* Info Panel */}
-               <div className="p-4 border-t border-border">
+               <div className="p-4 border-t border-border-color">
                     {selectedNode && (
                          <div className="mt-2 text-sm">
                               <strong>Selected:</strong> {mockNodes.find((n) => n.id === selectedNode)?.name}
