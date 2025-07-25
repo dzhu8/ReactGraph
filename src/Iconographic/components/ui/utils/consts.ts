@@ -13,6 +13,10 @@ const LINE_WIDTH = 2.5;
 const VERTICAL_SPACE_BETWEEN_STEP_AND_LINE = 7;
 const VERTICAL_SPACE_BETWEEN_STEPS = 85;
 
+// Mock step node dimensions
+const MOCK_STEP_NODE_HEIGHT = 70;
+const MOCK_STEP_NODE_WIDTH = 260;
+
 const AP_NODE_SIZE: Record<
   Exclude<ApNodeType, ApNodeType.GRAPH_START_WIDGET>,
   { height: number; width: number }
@@ -51,6 +55,8 @@ export const flowUtilConsts = {
     LABEL_HEIGHT,
     LABEL_VERTICAL_PADDING,
     LINE_WIDTH,
+    MOCK_STEP_NODE_HEIGHT,
+    MOCK_STEP_NODE_WIDTH,
     VERTICAL_SPACE_BETWEEN_STEP_AND_LINE,
     VERTICAL_SPACE_BETWEEN_STEPS,
 }
